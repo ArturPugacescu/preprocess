@@ -1,0 +1,5 @@
+name: Preprocess
+type: module
+description: 'Drupal preprocesses using Plugin API.'
+version: '8.x-0.1'
+core: 8.x

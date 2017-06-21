@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Preprocess module functions and hooks.
+ */
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function preprocess_preprocess_node(&$variables) {
+  $type = $variables['node']->getType();
+  $view_mode = $variables['elements']['#view_mode'];
+
+  // Select which preprocess plugin should be called.
+  foreach (preprocess_get_plugins() as $plugin_id => $plugin) {
+    if ($plugin['entity_type'] === 'node'
+      && $plugin['machine_name'] === $type
+      && $plugin['view_mode'] === $view_mode) {
+      $plugin['instance']->process($variables);
+      break;
+    }
+  }
+}
+
+/**
+ * Discover and instantiate plugins.
+ *
+ * @return array|mixed
+ *   Array of plugin definitions and instances.
+ */
+function preprocess_get_plugins() {
+  $plugin_instances = &drupal_static(__FUNCTION__);
+  if (NULL === $plugin_instances) {
+    // Instantiate all plugins.
+    $plugin_instances = [];
+    $preprocess_service = \Drupal::service('plugin.manager.preprocess_plugin_manager');
+    foreach ($preprocess_service->getDefinitions() as $plugin_id => $definition) {
+      $plugin_instances[$plugin_id] = array_merge(
+        $definition,
+        ['instance' => $preprocess_service->createInstance($plugin_id)]
+      );
+    }
+  }
+
+  return $plugin_instances;
+}
+

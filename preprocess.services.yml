@@ -1,0 +1,4 @@
+services:
+  plugin.manager.preprocess_plugin_manager:
+    class: Drupal\preprocess\PreprocessPluginManager
+    parent: default_plugin_manager
