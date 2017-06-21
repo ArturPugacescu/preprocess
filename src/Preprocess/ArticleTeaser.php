@@ -5,7 +5,7 @@ namespace Drupal\preprocess\Preprocess;
 use Drupal\preprocess\PreprocessBase;
 
 /**
- * Class H1Tag used to check h1 tags on page.
+ * Class ArticleTeaser used for preprocessing article nodes with teaser view mode.
  *
  * @PreprocessAnnotation(
  *   id = "node_article_teaser",
