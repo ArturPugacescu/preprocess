@@ -22,18 +22,11 @@ class PreprocessAnnotation extends Plugin {
   public $id;
 
   /**
-   * The type of entity to be processed.
+   * The bundle of entity.
    *
    * @var string
    */
-  public $entity_type;
-
-  /**
-   * The machine name of entity.
-   *
-   * @var string
-   */
-  public $machine_name;
+  public $bundle;
 
   /**
    * The view mode of entity.
@@ -41,5 +34,12 @@ class PreprocessAnnotation extends Plugin {
    * @var string
    */
   public $view_mode;
+
+  /**
+   * The theme for which entity is processed.
+   *
+   * @var string
+   */
+  public $theme;
 
 }
