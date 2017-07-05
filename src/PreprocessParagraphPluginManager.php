@@ -9,9 +9,9 @@ use Drupal\Core\Plugin\Factory\ContainerFactory;
 use Traversable;
 
 /**
- * Provides a Preprocess plugin manager.
+ * Provides a PreprocessParagraphPluginManager plugin manager.
  */
-class PreprocessPluginManager extends DefaultPluginManager {
+class PreprocessParagraphPluginManager extends DefaultPluginManager {
 
   /**
    * Constructs a PluginManager object.
@@ -26,14 +26,14 @@ class PreprocessPluginManager extends DefaultPluginManager {
    */
   public function __construct(Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct(
-      'Preprocess',
+      'Preprocess/Paragraph',
       $namespaces,
       $module_handler,
       'Drupal\preprocess\PreprocessPluginInterface',
       'Drupal\preprocess\Annotation\PreprocessAnnotation'
     );
-    $this->alterInfo('preprocess_info');
-    $this->setCacheBackend($cache_backend, 'preprocess_plugins');
+    $this->alterInfo('preprocess_paragraph_info');
+    $this->setCacheBackend($cache_backend, 'preprocess_paragraph_plugins');
     $this->factory = new ContainerFactory($this->getDiscovery());
   }
 }

@@ -1,4 +1,7 @@
 services:
-  plugin.manager.preprocess_plugin_manager:
-    class: Drupal\preprocess\PreprocessPluginManager
+  plugin.manager.preprocess_node_plugin_manager:
+    class: Drupal\preprocess\PreprocessNodePluginManager
+    parent: default_plugin_manager
+  plugin.manager.preprocess_paragraph_plugin_manager:
+    class: Drupal\preprocess\PreprocessParagraphPluginManager
     parent: default_plugin_manager
