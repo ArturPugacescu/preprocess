@@ -37,3 +37,10 @@ function preprocess_preprocess_node(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_paragraph().
+ */
+function preprocess_preprocess_paragraph(&$variables) {
+  preprocess_preprocess_node($variables);
+}
