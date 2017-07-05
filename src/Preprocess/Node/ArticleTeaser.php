@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\preprocess\Preprocess;
+namespace Drupal\preprocess\Preprocess\Node;
 
 use Drupal\preprocess\PreprocessBase;
 
@@ -8,10 +8,10 @@ use Drupal\preprocess\PreprocessBase;
  * Class ArticleTeaser used for preprocessing article nodes with teaser view mode.
  *
  * @PreprocessAnnotation(
- *   id = "node_article_teaser",
- *   entity_type = "node",
- *   machine_name = "article",
+ *   id = "article_teaser",
+ *   bundle = "article",
  *   view_mode = "teaser",
+ *   theme = "bartik",
  * )
  */
 class ArticleTeaser extends PreprocessBase {
