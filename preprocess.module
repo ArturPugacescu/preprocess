@@ -9,40 +9,31 @@
  * Implements hook_preprocess_node().
  */
 function preprocess_preprocess_node(&$variables) {
-  $type = $variables['node']->getType();
+  $entity_type = $variables['theme_hook_original'];
+  $plugin_service_id = ($entity_type === 'node') ? 'plugin.manager.preprocess_node_plugin_manager' : 'plugin.manager.preprocess_paragraph_plugin_manager';
+
+  $bundle = $variables[$entity_type]->getType();
   $view_mode = $variables['elements']['#view_mode'];
 
+  $plugin_service = \Drupal::service($plugin_service_id);
+  $theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+
+  // Do discovery only once per request.
+  $plugins = &drupal_static("preprocess_plugins_$bundle");
+  if (NULL === $plugins) {
+    $plugins = $plugin_service->getDefinitions();
+  }
+
   // Select which preprocess plugin should be called.
-  foreach (preprocess_get_plugins() as $plugin_id => $plugin) {
-    if ($plugin['entity_type'] === 'node'
-      && $plugin['machine_name'] === $type
-      && $plugin['view_mode'] === $view_mode) {
-      $plugin['instance']->process($variables);
+  foreach ($plugins as $plugin_id => $plugin) {
+    if ($plugin['bundle'] === $bundle && $plugin['view_mode'] === $view_mode && $plugin['theme'] === $theme) {
+      // Instantiate only plugins that are needed.
+      if (!isset($plugin['instance'])) {
+        // Save instances for later use.
+        $plugins[$plugin_id]['instance'] = $plugin_service->createInstance($plugin_id);
+      }
+      $plugins[$plugin_id]['instance']->process($variables);
       break;
     }
   }
 }
-
-/**
- * Discover and instantiate plugins.
- *
- * @return array|mixed
- *   Array of plugin definitions and instances.
- */
-function preprocess_get_plugins() {
-  $plugin_instances = &drupal_static(__FUNCTION__);
-  if (NULL === $plugin_instances) {
-    // Instantiate all plugins.
-    $plugin_instances = [];
-    $preprocess_service = \Drupal::service('plugin.manager.preprocess_plugin_manager');
-    foreach ($preprocess_service->getDefinitions() as $plugin_id => $definition) {
-      $plugin_instances[$plugin_id] = array_merge(
-        $definition,
-        ['instance' => $preprocess_service->createInstance($plugin_id)]
-      );
-    }
-  }
-
-  return $plugin_instances;
-}
-
